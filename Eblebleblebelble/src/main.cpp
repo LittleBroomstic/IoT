@@ -5,13 +5,16 @@
 #define TMP102_ADDR 0x48
 
 // WiFi credentials
-const char* ssid = "Tak";
-const char* password = "Tak123456";
+const char* ssid = "StumilowyLas";
+const char* password = "netlab123";
 
 // MQTT broker settings
-const char* mqtt_server = "127.0.0.1"; // e.g. Mosquitto broker IP
+const char* mqtt_server = "192.168.220.1"; // e.g. Mosquitto broker IP
 const int mqtt_port = 1883;
-const char* mqtt_topic = "esp32/tmp102";
+const char* mqtt_topic = "dom/salon/temp";
+
+int key = 2137;
+int keylimiter = 69;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -23,8 +26,8 @@ void setup_wifi() {
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+    delay(1000);
+    Serial.print(WiFi.status());
   }
 
   Serial.println("\nWiFi connected");
@@ -78,7 +81,13 @@ void setup() {
 
   client.setServer(mqtt_server, mqtt_port);
 }
+void encryptData(char * payload)
+{
+      for(int i = 0 ; payload[i] != '\0' ; i++){
+      payload[i] = (char)((int)payload[i] + key%keylimiter);
+    }
 
+}
 void loop() {
   if (!client.connected()) {
     reconnect_mqtt();
@@ -90,10 +99,10 @@ void loop() {
   if (!isnan(temperature)) {
     Serial.print("Temperature: ");
     Serial.println(temperature);
-
     char payload[10];
     dtostrf(temperature, 1, 2, payload);
-
+    encryptData(payload);
+    Serial.println(payload);
     client.publish(mqtt_topic, payload);
   } else {
     Serial.println("Failed to read temperature");
