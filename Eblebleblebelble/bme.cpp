@@ -15,6 +15,7 @@ const char* ssid = "StumilowyLas";
 const char* password = "netlab123";
 
 // MQTT broker settings
+const int esp_id = 1;
 const char* mqtt_server = "192.168.220.1";
 const int mqtt_port = 1883;
 const char* mqtt_topic = "esp32/humid";
