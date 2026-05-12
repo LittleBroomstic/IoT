@@ -136,8 +136,10 @@ void loop() {
     encryptData(payload);
 
     Serial.print("Encrypted payload: ");
-    Serial.println(payload);
 
+    String tempText = esp_id.ToString();
+    payload = tempText + ";" + payload;
+    Serial.println(payload);
     client.publish(mqtt_topic, payload);
 
   } else {
