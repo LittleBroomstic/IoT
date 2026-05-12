@@ -103,8 +103,8 @@ void loop() {
     char payload[10];
     dtostrf(temperature, 1, 2, payload);
     encryptData(payload);
-    String tempText = esp_id.ToString();
-    payload = tempText + ";" + payload;
+    char finalPayload[16];
+    sprintf(finalPayload, "%d;%s", esp_id, encrypted);
     Serial.println(payload);
     client.publish(mqtt_topic, payload);
   } else {
