@@ -11,7 +11,7 @@ const char* password = "netlab123";
 // MQTT broker settings
 const char* mqtt_server = "192.168.220.1";
 const int mqtt_port = 1883;
-const char* mqtt_topic = "dom/salon/light";
+const char* mqtt_topic = "esp32/light";
 
 // Encryption variables
 int key = 2137;
