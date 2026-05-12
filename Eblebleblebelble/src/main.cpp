@@ -97,25 +97,21 @@ void loop() {
 
   float temperature = readTemperature();
 
+
+  Serial.print("Temperature: ");
+  Serial.println(temperature);
+  char payload[10];
   if (!isnan(temperature)) {
-    Serial.print("Temperature: ");
-    Serial.println(temperature);
-    char payload[10];
     dtostrf(temperature, 1, 2, payload);
-    encryptData(payload);
-    char finalPayload[16];
-    sprintf(finalPayload, "%d;%s", esp_id, payload);
-    Serial.println(finalPayload);
-    client.publish(mqtt_topic, finalPayload);
-  } else {
-    char payload[10];
-    strcpy(payload, "nan");
-    encrypData(payload);
-    char finalPayload[16];
-    sprintf(finalPayload, "%d;%s", esp_id, payload);
-    Serial.println(finalPayload);
-    client.publish(mqtt_topic, finalPayload);
   }
+  else {
+    strcpy(payload, "nan");
+  }
+  encryptData(payload);
+  char finalPayload[16];
+  sprintf(finalPayload, "%d;%s", esp_id, payload);
+  Serial.println(finalPayload);
+  client.publish(mqtt_topic, finalPayload);
 
   delay(1000);
 }
