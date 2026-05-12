@@ -108,7 +108,8 @@ void loop() {
     Serial.println(finalPayload);
     client.publish(mqtt_topic, finalPayload);
   } else {
-    payload = "nan";
+    char payload[10];
+    strcpy(payload, "nan");
     char finalPayload[16];
     sprintf(finalPayload, "%d;%s", esp_id, payload);
     Serial.println(finalPayload);
