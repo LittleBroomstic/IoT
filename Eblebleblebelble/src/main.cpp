@@ -8,6 +8,7 @@
 const char* ssid = "StumilowyLas";
 const char* password = "netlab123";
 
+const int esp_id = 1;
 // MQTT broker settings
 const char* mqtt_server = "192.168.220.1"; // e.g. Mosquitto broker IP
 const int mqtt_port = 1883;
@@ -102,6 +103,8 @@ void loop() {
     char payload[10];
     dtostrf(temperature, 1, 2, payload);
     encryptData(payload);
+    String tempText = esp_id.ToString();
+    payload = tempText + ";" + payload;
     Serial.println(payload);
     client.publish(mqtt_topic, payload);
   } else {
