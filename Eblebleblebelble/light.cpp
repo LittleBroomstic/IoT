@@ -90,32 +90,41 @@ void setup() {
   client.setServer(mqtt_server, mqtt_port);
 }
 
+int readLightLevel() {
+  int val = analogRead(LIGHT_PIN);
+  
+  // Basic sanity check: If the value is impossible, return -1 
+  // (In your case, analogRead is 0-4095, so -1 is our "Internal Error")
+  if (val < 0 || val > 4095) return -1; 
+  
+  return val;
+}
+
 void loop() {
-
   if (!client.connected()) {
-
     reconnect_mqtt();
   }
-
   client.loop();
 
-  int light = readLightLevel();
-
-  Serial.print("Light level: ");
-  Serial.println(light);
-
+  int lightValue = readLightLevel();
   char payload[10];
 
-  itoa(light, payload, 10);
+  // Logic to handle "Invalid" or "NaN" readings
+  if (lightValue != -1) {
+    itoa(lightValue, payload, 10);
+  } else {
+    strcpy(payload, "nan");
+  }
 
   encryptData(payload);
-  String tempText = esp_id.ToString();
-  payload = tempText + ";" + payload;
 
-  Serial.print("Encrypted payload: ");
-  Serial.println(payload);
+  char finalPayload[24]; 
+  sprintf(finalPayload, "%d;%s", esp_id, payload);
 
-  client.publish(mqtt_topic, payload);
+  Serial.print("Sending: ");
+  Serial.println(finalPayload);
+  
+  client.publish(mqtt_topic, finalPayload);
 
-  delay(2000);
+  delay(1000); 
 }
