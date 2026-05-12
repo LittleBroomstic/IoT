@@ -104,11 +104,15 @@ void loop() {
     dtostrf(temperature, 1, 2, payload);
     encryptData(payload);
     char finalPayload[16];
-    sprintf(finalPayload, "%d;%s", esp_id, encrypted);
-    Serial.println(payload);
-    client.publish(mqtt_topic, payload);
+    sprintf(finalPayload, "%d;%s", esp_id, payload);
+    Serial.println(finalPayload);
+    client.publish(mqtt_topic, finalPayload);
   } else {
-    Serial.println("Failed to read temperature");
+    payload = "nan";
+    char finalPayload[16];
+    sprintf(finalPayload, "%d;%s", esp_id, payload);
+    Serial.println(finalPayload);
+    client.publish(mqtt_topic, finalPayload);
   }
 
   delay(1000);
