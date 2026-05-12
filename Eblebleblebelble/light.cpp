@@ -8,6 +8,7 @@
 const char* ssid = "StumilowyLas";
 const char* password = "netlab123";
 
+const int esp_id = 1;
 // MQTT broker settings
 const char* mqtt_server = "192.168.220.1";
 const int mqtt_port = 1883;
@@ -108,6 +109,8 @@ void loop() {
   itoa(light, payload, 10);
 
   encryptData(payload);
+  String tempText = esp_id.ToString();
+  payload = tempText + ";" + payload;
 
   Serial.print("Encrypted payload: ");
   Serial.println(payload);
