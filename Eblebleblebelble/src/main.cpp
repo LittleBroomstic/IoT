@@ -110,6 +110,7 @@ void loop() {
   } else {
     char payload[10];
     strcpy(payload, "nan");
+    encrypData(payload);
     char finalPayload[16];
     sprintf(finalPayload, "%d;%s", esp_id, payload);
     Serial.println(finalPayload);
