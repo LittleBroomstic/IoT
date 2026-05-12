@@ -73,8 +73,13 @@ void encryptData(char * payload)
 }
 
 int readLightLevel() {
-
-  return analogRead(LIGHT_PIN);
+  int val = analogRead(LIGHT_PIN);
+  
+  // Basic sanity check: If the value is impossible, return -1 
+  // (In your case, analogRead is 0-4095, so -1 is our "Internal Error")
+  if (val <= 0 || val >= 2000) return -1; 
+  
+  return val;
 }
 
 void setup() {
@@ -84,20 +89,10 @@ void setup() {
   delay(1000);
 
   pinMode(LIGHT_PIN, INPUT);
-
+  
   setup_wifi();
 
   client.setServer(mqtt_server, mqtt_port);
-}
-
-int readLightLevel() {
-  int val = analogRead(LIGHT_PIN);
-  
-  // Basic sanity check: If the value is impossible, return -1 
-  // (In your case, analogRead is 0-4095, so -1 is our "Internal Error")
-  if (val < 0 || val > 4095) return -1; 
-  
-  return val;
 }
 
 void loop() {
@@ -126,5 +121,5 @@ void loop() {
   
   client.publish(mqtt_topic, finalPayload);
 
-  delay(1000); 
+  delay(10000); 
 }
