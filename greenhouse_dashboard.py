@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import os
 
 st.set_page_config(page_title="Szklarnia Monitor", layout="wide")
-st.title("🌱 Monitor Szklarni - Dashboard")
+st.title("Monitor Szklarni - Dashboard")
 
 # ================== KONFIGURACJA ==================
 DATA_FILES = {
